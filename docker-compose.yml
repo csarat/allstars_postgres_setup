@@ -3,7 +3,7 @@ services:
     build:
       context: .            # folder with Dockerfile
       dockerfile: Dockerfile
-    container_name: allstars-reporting
+    container_name: allstars-analytics
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -18,4 +18,14 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - /opt/postgres/data:/var/lib/postgresql/data
+      - type: volume
+        source: pg_data
+        target: /var/lib/postgresql/data
+
+volumes:
+  pg_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/postgres/data
+      o: bind
